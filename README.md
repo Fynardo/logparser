@@ -4,7 +4,7 @@ Python CLI application that helps parsing logs of various kinds.
 
 # Usage
 
-`./util.py [OPTION]... [FILE]`
+`./logparser.py [OPTION]... [FILE]`
 
 ## Options
 
@@ -21,13 +21,11 @@ results.
 ## Examples
 
 `cat test_0.log | ./logparser.py --first 10`
-<prints the first 10 lines of test_0.log>
 
 `./logparser.py -l 5 test_1.log`
-<prints the last 5 lines of test_1.log>
 
-`./utils.py --timestamps test_2.log`
-<prints any lines from test_2.log that contain a timestamp>
+`./logparser.py --timestamps test_2.log`
+
 
 
 # Testing
