@@ -2,7 +2,7 @@
 
 
 from tests.base import base_path, get_fd, load_log
-from logparser import filter_log, _filter_timestamp
+from logparser import _filter_timestamp, _filter_ipv4
 
 
 def test_all_valid_timestamps():
@@ -17,3 +17,18 @@ def test_all_invalid_timestamps():
 
     for line in log:
         assert not _filter_timestamp(line)
+
+
+def test_all_valid_ipv4():
+    log = load_log('valid_ipv4.log')
+
+    for line in log:
+        assert _filter_ipv4(line)
+
+
+def test_all_invalid_ipv4():
+    log = load_log('invalid_ipv4.log')
+
+    for line in log:
+        assert not _filter_ipv4(line)
+

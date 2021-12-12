@@ -44,10 +44,21 @@ def _get_fd(path=None):
         return sys.stdin
 
 
+# Regex
+_ipv4_regex = r"\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\."\
+              r"(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\."\
+              r"(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\."\
+              r"(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\b"
+
+
 # Filters
 def _filter_timestamp(line):
     s = r'(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]'
     return re.search(s, line) is not None
+
+
+def _filter_ipv4(line):
+    return re.search(_ipv4_regex, line) is not None
 
 
 def _predicates_list(filters):
@@ -55,10 +66,47 @@ def _predicates_list(filters):
     for f in filters:
         if f == 't':
             predicates.append(_filter_timestamp)
+        if f == 'i':
+            predicates.append(_filter_ipv4)
     return predicates
 
 
+# Highlighters
+def _highlight_str(color, s):
+    return f'\033[{color}m{s}\033[m'
+
+
+def _red_highlight(s):
+    return _highlight_str(';31', s)
+
+
+def _highlight(regex, line):
+    for iter in re.finditer(_ipv4_regex, line):
+        line = re.sub(iter[0], _red_highlight(iter[0]), line)
+    return line
+
+
+def _highlight_ipv4(line):
+    return _highlight(_ipv4_regex, line)
+
+
+def _highlighters_list(highs):
+    highlighters = []
+    for h in highs:
+        if h == 'i':
+            highlighters.append(_highlight_ipv4)
+    return highlighters
+
+
 # Main
+def highlight_log(lines, highlighters):
+    if not highlighters:
+        return lines
+    for highlight in highlighters:
+        highlighted_lines = list(map(lambda x: highlight(x), lines))
+    return highlighted_lines
+
+
 def filter_log(lines, predicates):
     return [line for line in lines if all([pred(line) for pred in predicates])]
 
@@ -67,7 +115,8 @@ def parse_log(file_, f, l, filters):
     fd = _get_fd(file_)
     lines = partition(fd, f, l)
     filtered_lines = filter_log(lines, _predicates_list(filters))
-    return filtered_lines
+    highlighted_lines = highlight_log(filtered_lines, _highlighters_list(filters))
+    return highlighted_lines
 
 
 if __name__ == '__main__':
@@ -88,6 +137,8 @@ if __name__ == '__main__':
                         help='Print last NUM lines')
     parser.add_argument('-t','--timestamps', dest='filters', action='append_const', const='t',
                         help='Print lines that contain a timestamp in HH:MM:SS format')
+    parser.add_argument('-i','--ipv4', dest='filters', action='append_const', const='i',
+                        help='Print lines that contain an IPv4 address, matching IPs are highlighted')
     parser.set_defaults(filters = [])
     args = parser.parse_args()
 
