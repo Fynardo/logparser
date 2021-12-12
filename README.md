@@ -11,6 +11,7 @@ Python CLI application that helps parsing logs of various kinds.
 * -h, --help         Print help
 * -f, --first NUM    Print first NUM lines
 * -l, --last NUM     Print last NUM lines
+* -t, --timestamps   Print lines that contain a timestamp in HH:MM:SS format
 
 If FILE is omitted, standard input is used instead.
 
@@ -24,6 +25,9 @@ results.
 
 `./logparser.py -l 5 test_1.log`
 <prints the last 5 lines of test_1.log>
+
+`./utils.py --timestamps test_2.log`
+<prints any lines from test_2.log that contain a timestamp>
 
 
 # Testing

@@ -1,19 +1,8 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
+from tests.base import base_path, get_fd, load_log
 from logparser import _first, _last, _all
-from pathlib import Path
-
-
-_base_path = Path('tests')
-
-def get_fd(logfile):
-    return open(_base_path / logfile)
-
-def load_log(logfile):
-    with get_fd(logfile) as f:
-        return f.read().splitlines()
 
 
 def test_first():

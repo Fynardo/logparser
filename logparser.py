@@ -5,6 +5,7 @@
 import sys
 import argparse
 from collections import deque
+import re
 
 
 # Partition functions
@@ -43,11 +44,30 @@ def _get_fd(path=None):
         return sys.stdin
 
 
+# Filters
+def _filter_timestamp(line):
+    s = r'(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]'
+    return re.search(s, line) is not None
+
+
+def _predicates_list(filters):
+    predicates = []
+    for f in filters:
+        if f == 't':
+            predicates.append(_filter_timestamp)
+    return predicates
+
+
 # Main
-def parse_log(file_, f, l):
+def filter_log(lines, predicates):
+    return [line for line in lines if all([pred(line) for pred in predicates])]
+
+
+def parse_log(file_, f, l, filters):
     fd = _get_fd(file_)
     lines = partition(fd, f, l)
-    return lines
+    filtered_lines = filter_log(lines, _predicates_list(filters))
+    return filtered_lines
 
 
 if __name__ == '__main__':
@@ -66,7 +86,9 @@ if __name__ == '__main__':
                         help='Print first NUM lines')
     parser.add_argument('-l','--last', metavar='NUM', type=positive_int,
                         help='Print last NUM lines')
+    parser.add_argument('-t','--timestamps', dest='filters', action='append_const', const='t',
+                        help='Print lines that contain a timestamp in HH:MM:SS format')
     args = parser.parse_args()
 
-    print('\n'.join(parse_log(args.file, args.first, args.last)))
+    print('\n'.join(parse_log(args.file, args.first, args.last, args.filters)))
 
