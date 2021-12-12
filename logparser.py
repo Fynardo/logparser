@@ -88,6 +88,7 @@ if __name__ == '__main__':
                         help='Print last NUM lines')
     parser.add_argument('-t','--timestamps', dest='filters', action='append_const', const='t',
                         help='Print lines that contain a timestamp in HH:MM:SS format')
+    parser.set_defaults(filters = [])
     args = parser.parse_args()
 
     print('\n'.join(parse_log(args.file, args.first, args.last, args.filters)))
