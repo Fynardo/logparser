@@ -30,7 +30,7 @@ def test_all():
 
     fd = get_fd('test_0.log')
     lines = _all(fd)
-    assert len(lines) == 5
+    assert len(lines) == 25
     for i in range(len(lines)):
         assert lines[i] == log[i]
 
