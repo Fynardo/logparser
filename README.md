@@ -13,6 +13,7 @@ Python CLI application that helps parsing logs of various kinds.
 * -l, --last NUM     Print last NUM lines
 * -t, --timestamps   Print lines that contain a timestamp in HH:MM:SS format
 * -i, --ipv4         Print lines that contain an IPv4 address, matching IPs are highlighted
+* -I, --ipv6         Print lines that contain an IPv6 address (standard notation), matching IPs are highlighted
 
 If FILE is omitted, standard input is used instead.
 
@@ -28,6 +29,8 @@ results.
 `./logparser.py --timestamps test_2.log`
 
 `./logparser.py --ipv4 test_3.log`
+
+`./logparser.py --ipv6 test_3.log`
 
 `./logparser.py --ipv4 --last 50 test_3.log`
 
