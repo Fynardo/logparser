@@ -137,15 +137,16 @@ def parse_log(file_, f, l, filters):
     return highlighted_lines
 
 
-if __name__ == '__main__':
+# Args Handlers
+def positive_int(value):
+    v = int(value)
+    if v > 0:
+        return v
+    else:
+        raise argparse.ArgumentTypeError('only positive numbers.') 
 
-    def positive_int(value):
-        v = int(value)
-        if v > 0:
-            return v
-        else:
-            raise argparse.ArgumentTypeError('only positive numbers.') 
 
+def parse_args(args):
     parser = argparse.ArgumentParser(description='Parse logs.')
     parser.add_argument('file', metavar='FILE', nargs='?', 
                         help='an integer for the accumulator')
@@ -160,7 +161,10 @@ if __name__ == '__main__':
     parser.add_argument('-I','--ipv6', dest='filters', action='append_const', const='I',
                         help='Print lines that contain an IPv6 address (standard notation), matching IPs are highlighted')
     parser.set_defaults(filters = [])
-    args = parser.parse_args()
+    return parser.parse_args(args)
 
+
+if __name__ == '__main__':
+    args = parse_args(sys.argv[1:])
     print('\n'.join(parse_log(args.file, args.first, args.last, args.filters)))
 
