@@ -46,3 +46,10 @@ Or, test with coverage
 `make cov-test`
 
 **Note**: Test files were generated using [logs.to](https://www.logs.to/) tool.
+
+# Instalation
+
+Setup file is included, just
+
+`pip install .`
+
