@@ -1,6 +1,7 @@
 # Log Parser
 Python CLI application that helps parsing logs of various kinds.
 
+![Testing](https://github.com/Fynardo/logparser/actions/workflows/python-app.yml/badge.svg)
 
 # Usage
 
