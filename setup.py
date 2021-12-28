@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="logparser",
-    version="1.0.0",
+    version="1.0.1",
     py_modules=['logparser'],
     author="Diego Noceda",
     author_email="dfynar@gmail.com",
@@ -20,6 +20,11 @@ setuptools.setup(
         "Operating System :: POSIX",
     ],
     python_requires='>=3.8.5',
+    entry_points={
+        'console_scripts': [
+            'logparser = logparser:main',
+        ],
+    },
 )
 
 
